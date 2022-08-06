@@ -1,20 +1,17 @@
-class Solution {
+package programmers.TOSS;
+
+public class DungeonExploration {
     int max;
 
     public void dfs(int k, int[][] dungeons, boolean[] visited, int depth) {
         if (max == dungeons.length) return;
-        //System.out.println("max=" + max + "K=" + k + " " + depth);
-
         for (int i = 0; i < dungeons.length; i++) {
-            //System.out.println(i + " " + visited[i]);
             if (!visited[i]) {
                 int tmpK = k;
-                // System.out.println(Arrays.toString(visited));
                 if (tmpK < dungeons[i][0]) continue;
                 else tmpK -= dungeons[i][1];
                 visited[i] = true;
                 max = Integer.max(max, depth + 1);
-                //System.out.println(tmpK + " " + Arrays.toString(visited) + " " + " " + max);
                 dfs(tmpK, dungeons, visited, depth + 1);
                 visited[i] = false;
             }
