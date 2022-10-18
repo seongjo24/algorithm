@@ -11,13 +11,11 @@ public class RemoveByPair {
         for (int i = 0; i < carr.length; i++) {
             char c = carr[i];
 
-            if (stack.isEmpty()) stack.push(c);
-
-            else {
-
+            if (stack.isEmpty()) {
+                stack.push(c);
+            } else {
                 if (stack.peek() == c) {
                     stack.pop();
-
                 } else {
                     stack.push(c);
                 }
