@@ -17,6 +17,7 @@ public class ParkingFeeCalculation {
             String[] infos = records[i].split(" ");
 
             if (map.containsKey(infos[1])) {
+
                 String[] inTime = map.remove(infos[1]).split(":");
                 String[] outTime = infos[0].split(":");
 

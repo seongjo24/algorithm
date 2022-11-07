@@ -1,5 +1,8 @@
 package programmers.kakaoInternship;
-import java.util.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
 public class MaximizeFormulas {
 
     private String expression;
@@ -31,6 +34,7 @@ public class MaximizeFormulas {
         List<String> operatorList = new LinkedList<>();
 
         for (int i = 0; i < expression.length(); i++) {
+
             if (expression.charAt(i) == '+' || expression.charAt(i) == '-' || expression.charAt(i) == '*') {
                 operandList.add(Long.parseLong(post.toString()));
                 post = new StringBuilder();
@@ -44,13 +48,13 @@ public class MaximizeFormulas {
         for (int i = 0; i < 3; i++) {
             String nowOperator = String.valueOf(operator.charAt(i));
 
-            while(operatorList.size() != 0){
+            while (operatorList.size() != 0) {
                 int index = operatorList.indexOf(nowOperator);
 
-                if(index == -1)
+                if (index == -1)
                     break;
-                else{
-                    switch (nowOperator){
+                else {
+                    switch (nowOperator) {
                         case "+":
                             operandList.add(index, operandList.get(index) + operandList.get(index + 1));
                             break;
