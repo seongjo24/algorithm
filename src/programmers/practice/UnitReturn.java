@@ -3,49 +3,35 @@ package programmers.practice;
 import java.util.*;
 
 public class UnitReturn {
-    private static List<List<Integer>> graph;
-    private static int[] dis;
-    private static final int MAX = Integer.MAX_VALUE;
+    public int[] solution(int n, int[][] roads, int[] sources, int destination) {
+        int[] answer = new int[sources.length];
+        int[] sum = new int[n + 1];
+        int[] visit = new int[n + 1];
+        int now = 0;
+        Map<Integer, List<Integer>> graph = new HashMap<>();
 
-    public static int[] solution(int n, int[][] roads, int[] sources, int destination) {
-
-        graph = new ArrayList<>();
-        for (int i = 0; i < n + 1; i++) graph.add(new ArrayList<>());
-
-        for (int[] road : roads) {
-            int s = road[0];
-            int e = road[1];
-
-            graph.get(s).add(e);
-            graph.get(e).add(s);
+        LinkedList<Integer> q = new LinkedList<Integer>();
+        Arrays.fill(visit, -1);
+        Arrays.fill(answer, -1);
+        for (int i = 0; i < roads.length; i++) {
+            graph.computeIfAbsent(roads[i][0], k -> new ArrayList<>()).add(roads[i][1]);
+            graph.computeIfAbsent(roads[i][1], k -> new ArrayList<>()).add(roads[i][0]);
         }
-
-        dis = new int[n + 1];
-        Arrays.fill(dis, MAX);
-        dijkstra(destination);
-
-        int[] ans = new int[sources.length];
-        for (int i = 0; i < sources.length; i++) {
-            ans[i] = (dis[sources[i]] < MAX) ? dis[sources[i]] : -1;
-        }
-        return ans;
-    }
-
-    private static void dijkstra(int destination) {
-        Queue<Integer> qu = new LinkedList<>();
-        qu.add(destination);
-        dis[destination] = 0;
-
-        while (!qu.isEmpty()) {
-            int cn = qu.poll();
-
-            for (int i = 0; i < graph.get(cn).size(); i++) {
-                int nn = graph.get(cn).get(i);
-                if (dis[nn] > dis[cn] + 1) {
-                    dis[nn] = dis[cn] + 1;
-                    qu.add(nn);
+        visit[destination] = 0;
+        q.add(destination);
+        while (q.size() != 0) {
+            now = q.poll();
+            for (Integer i : graph.get(now)) {
+                if (visit[i] == -1) {
+                    visit[i] = visit[now] + 1;
+                    q.add(i);
                 }
             }
         }
+        for (int i = 0; i < sources.length; i++) {
+            answer[i] = visit[sources[i]];
+        }
+
+        return answer;
     }
 }
