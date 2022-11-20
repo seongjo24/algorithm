@@ -1,40 +1,88 @@
 class Solution {
-    int max;
+    static final int SIZE = 101;
+    static boolean[][] board = new boolean[SIZE][SIZE]; // true: 점
 
-    public void dfs(int k, int[][] dungeons, boolean[] visited, int depth) {
-        if (max == dungeons.length) return;
-        //System.out.println("max=" + max + "K=" + k + " " + depth);
+    int[] dR = new int[]{-1, 1, 0, 0};
+    int[] dC = new int[]{0, 0, -1, 1};
 
-        for (int i = 0; i < dungeons.length; i++) {
-            //System.out.println(i + " " + visited[i]);
-            if (!visited[i]) {
-                int tmpK = k;
-                // System.out.println(Arrays.toString(visited));
-                if (tmpK < dungeons[i][0]) continue;
-                else tmpK -= dungeons[i][1];
-                visited[i] = true;
-                max = Integer.max(max, depth + 1);
-                //System.out.println(tmpK + " " + Arrays.toString(visited) + " " + " " + max);
-                dfs(tmpK, dungeons, visited, depth + 1);
-                visited[i] = false;
-            }
+    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
 
+        int srcRow = characterY * 2;
+        int srcCol = characterX * 2;
+        int dstRow = itemY * 2;
+        int dstCol = itemX * 2;
+
+        markRect(rectangle);
+
+
+        int totalDistance = findDistance(srcRow, srcCol, srcRow, srcCol, new boolean[SIZE][SIZE], 0) + 1;
+        int distance = findDistance(srcRow, srcCol, dstRow, dstCol, new boolean[SIZE][SIZE], 0);
+
+        return Math.min(distance, totalDistance - distance) / 2;
+    }
+
+    private void markRect(int[][] rectangles) {
+        for (int[] rect: rectangles) {
+            int firstRow = 2* rect[1];
+            int firstCol = 2* rect[0];
+            int secondRow = 2* rect[3];
+            int secondCol = 2* rect[2];
+
+            markEdge(firstRow, firstCol, secondRow, secondCol);
         }
 
+        for (int[] rect: rectangles) {
+            int firstRow = 2* rect[1];
+            int firstCol = 2* rect[0];
+            int secondRow = 2* rect[3];
+            int secondCol = 2* rect[2];
+
+            markSpace(firstRow, firstCol, secondRow, secondCol);
+        }
     }
 
 
-    public int solution(int k, int[][] dungeons) {
-        max = 0;
-        for (int i = 0; i < dungeons.length; i++) {
-            int tmpK = k;
-            boolean[] visited = new boolean[dungeons.length];
-            if (tmpK < dungeons[i][0]) continue;
-            else tmpK -= dungeons[i][1];
-            visited[i] = true;
-            max = Integer.max(max, 1);
-            dfs(tmpK, dungeons, visited, 1);
+    private void markEdge(int firstRow, int firstCol, int secondRow, int secondCol) {
+        for(int row = firstRow; row <= secondRow; row++) {
+            board[row][firstCol] = true;
         }
-        return max;
+        for(int col = firstCol + 1; col <= secondCol; col++) {
+            board[secondRow][col] = true;
+        }
+        for(int row = secondRow - 1; row >= firstRow; row--) {
+            board[row][secondCol] = true;
+        }
+        for (int col = secondCol - 1; col > firstCol; col--) {
+            board[firstRow][col] = true;
+        }
+    }
+
+
+    private void markSpace(int firstRow, int firstCol, int secondRow, int secondCol) {
+        for (int row = firstRow + 1; row < secondRow; row++) {
+            for (int col = firstCol + 1; col < secondCol; col++) {
+                board[row][col] = false;
+            }
+        }
+    }
+
+
+    private int findDistance(int row, int col, final int dstRow, final int dstCol, final boolean[][] visited, int count) {
+        if (count > 0 && row == dstRow && col == dstCol) {
+            return count;
+        }
+
+        visited[row][col] = true;
+
+        for (int i = 0; i < 4; i++) {
+            int newRow = row + dR[i];
+            int newCol = col + dC[i];
+
+            if (newRow >= 0 && newRow < SIZE && newCol >= 0 && newCol < SIZE && board[newRow][newCol] && !visited[newRow][newCol]) {
+                return findDistance(newRow, newCol, dstRow, dstCol, visited, count+1);
+            }
+        }
+
+        return count;
     }
 }
