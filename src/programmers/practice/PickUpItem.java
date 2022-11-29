@@ -1,4 +1,6 @@
-class Solution {
+package programmers.practice;
+
+public class PickUpItem {
     static final int SIZE = 101;
     static boolean[][] board = new boolean[SIZE][SIZE]; // true: 점
 
@@ -22,20 +24,20 @@ class Solution {
     }
 
     private void markRect(int[][] rectangles) {
-        for (int[] rect: rectangles) {
-            int firstRow = 2* rect[1];
-            int firstCol = 2* rect[0];
-            int secondRow = 2* rect[3];
-            int secondCol = 2* rect[2];
+        for (int[] rect : rectangles) {
+            int firstRow = 2 * rect[1];
+            int firstCol = 2 * rect[0];
+            int secondRow = 2 * rect[3];
+            int secondCol = 2 * rect[2];
 
             markEdge(firstRow, firstCol, secondRow, secondCol);
         }
 
-        for (int[] rect: rectangles) {
-            int firstRow = 2* rect[1];
-            int firstCol = 2* rect[0];
-            int secondRow = 2* rect[3];
-            int secondCol = 2* rect[2];
+        for (int[] rect : rectangles) {
+            int firstRow = 2 * rect[1];
+            int firstCol = 2 * rect[0];
+            int secondRow = 2 * rect[3];
+            int secondCol = 2 * rect[2];
 
             markSpace(firstRow, firstCol, secondRow, secondCol);
         }
@@ -43,13 +45,13 @@ class Solution {
 
 
     private void markEdge(int firstRow, int firstCol, int secondRow, int secondCol) {
-        for(int row = firstRow; row <= secondRow; row++) {
+        for (int row = firstRow; row <= secondRow; row++) {
             board[row][firstCol] = true;
         }
-        for(int col = firstCol + 1; col <= secondCol; col++) {
+        for (int col = firstCol + 1; col <= secondCol; col++) {
             board[secondRow][col] = true;
         }
-        for(int row = secondRow - 1; row >= firstRow; row--) {
+        for (int row = secondRow - 1; row >= firstRow; row--) {
             board[row][secondCol] = true;
         }
         for (int col = secondCol - 1; col > firstCol; col--) {
@@ -79,7 +81,7 @@ class Solution {
             int newCol = col + dC[i];
 
             if (newRow >= 0 && newRow < SIZE && newCol >= 0 && newCol < SIZE && board[newRow][newCol] && !visited[newRow][newCol]) {
-                return findDistance(newRow, newCol, dstRow, dstCol, visited, count+1);
+                return findDistance(newRow, newCol, dstRow, dstCol, visited, count + 1);
             }
         }
 
