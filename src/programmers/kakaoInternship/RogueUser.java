@@ -1,7 +1,9 @@
+package programmers.kakaoInternship;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-class Solution {
+public class RogueUser {
     static HashSet<HashSet<String>> answer;
 
     public int solution(String[] user_id, String[] banned_id) {
