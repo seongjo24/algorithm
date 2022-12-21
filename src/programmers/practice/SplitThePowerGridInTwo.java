@@ -1,59 +1,55 @@
 package programmers.practice;
-//https://school.programmers.co.kr/learn/courses/30/lessons/86971
-import java.util.LinkedList;
-import java.util.Queue;
-class Solution {
-    static int[][] arr;
+
+import java.util.*;
+class SplitThePowerGridInTwo {
+    int min;
+    int N;
+    boolean[][] edges;
+    boolean[] visited;
     public int solution(int n, int[][] wires) {
-        int answer = n;
-        arr= new int[n+1][n+1];
+        N=n+1;
+        edges = new boolean[N][N];
+        visited= new boolean[N];
+        int min= Integer.MAX_VALUE;
+        for(int i =0;i<wires.length;i++){
 
+            int a= wires[i][0];
+            int b= wires[i][1];
+            edges[a][b]=true;
+            edges[b][a]=true;
+        }
+        for(int i =0;i<wires.length;i++){
+            Arrays.fill(visited, false);
+            int a= wires[i][0];
+            int b= wires[i][1];
+            edges[a][b]=false;
+            edges[b][a]=false;
 
-        for(int i=0; i<wires.length; i++){
-            arr[wires[i][0]][wires[i][1]]=1;
-            arr[wires[i][1]][wires[i][0]]=1;
+            int aCnt= dfs(a,0);
+            int bCnt= dfs(b,0);
+            min= Math.min(min,Math.abs(aCnt-bCnt));
+            edges[a][b]=true;
+            edges[b][a]=true;
+
         }
 
-
-        int a, b;
-        for(int i=0; i<wires.length; i++){
-            a= wires[i][0];
-            b= wires[i][1];
-
-
-            arr[a][b]=0;
-            arr[b][a]=0;
-
-
-            answer= Math.min(answer, bfs(n, a));
-
-
-            arr[a][b]=1;
-            arr[b][a]=1;
-        }
-
-        return answer;
+        return min;
     }
 
-    public int bfs(int n, int start){
-        int[] visit= new int[n+1];
-        int cnt=1;
+    public int dfs(int cur,int cnt){
+        if(visited[cur]) return 0;
 
-        Queue<Integer> queue= new LinkedList<>();
-        queue.offer(start);
+        visited[cur]=true;
 
-        while(!queue.isEmpty()){
-            int point= queue.poll();
-            visit[point]= 1;
+        int sum = 1;
 
-            for(int i=1; i<=n; i++){
-                if(visit[i]==1) continue;
-                if(arr[point][i]==1) {
-                    queue.offer(i);
-                    cnt++;
-                }
+        for(int i=0; i<N;i++){
+            if(!edges[cur][i]){
+                continue;
             }
+            sum+=dfs(i,cnt+1);
         }
-        return (int)Math.abs(n-2*cnt);
+        visited[cur] = false;
+        return sum;
     }
 }
